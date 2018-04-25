@@ -1,3 +1,47 @@
+reate an folder /DataVolume/shares/share/transmission2.93
+cd /DataVolume/shares/share/transmission2.93
+
+b. Please download form the following git path, if you use offical codes, you will get some errors.
+ipkg-opt install git
+git clone git://github.com/soyoeml/transmission-2.93.git
+
+c. Install build tools
+ipkg-opt install gcc make p7zip openssl-dev libevent libcurl-dev zlib
+
+d. configure the make file.
+./configure --disable-mac --disable-nls CPPFLAGS=-D__powerpc OPENSSL_CFLAGS=-I/opt/include OPENSSL_LIBS="-L/opt/lib -lssl -lcrypto -ldl" LIBEVENT_CFLAGS=-I/opt/include LIBEVENT_LIBS="-L/opt/lib -levent" ZLIB_CFLAGS=-I/opt/include ZLIB_LIBS="-L/opt/lib -lz" LIBCURL_CFLAGS=-I/opt/include LIBCURL_LIBS="-L/opt/lib -lcurl"
+
+e. modify Makefile the line #CLI-DIR = cli to CLI-DIR = cli
+
+f. make
+make
+
+g. install to dir /nfs/share/workspaces/transmission-2.93/install_target
+make DESTDIR=/nfs/share/workspaces/transmission-2.93/install_target install
+
+How to run in your WD my book live?
+
+a. download transmission 2.83 from http://ipkg.nslu2-linux.org/feeds/optware/cs05q1armel/cross/unstable/transmission_2.82-1_arm.ipk
+wget http://ipkg.nslu2-linux.org/feeds/optware/cs05q1armel/cross/unstable/transmission_2.82-1_arm.ipk
+
+b. install transmission 2.83
+ipkg install transmission_2.82-1_arm.ipk
+
+c. replace with your build
+cp /nfs/share/workspaces/transmission-2.93/install_target/usr/local/bin/transmission* /opt/bin/
+rm -rf /opt/share/transmission 
+cp -R /nfs/share/workspaces/transmission-2.93/install_target/usr/local/share/transmission /opt/share/
+
+d. edit ~/.bashrc and add to last line:
+export TRANSMISSION_WEB_HOME=/opt/share/transmission/web
+
+e. source ~/.bashrc
+
+f. restart transmission
+/etc/init.d/transmission-daemon restart
+
+That's it.
+
 ABOUT
 
   Transmission is a fast, easy, and free BitTorrent client.
